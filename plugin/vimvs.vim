@@ -3,7 +3,7 @@
 " Check [https://github.com/ruifig/vim-vs] for updates
 "
 
-if !has('python')
+if !has('python3')
 	echoerr "vimvs requires Python support"
 	finish
 endif
@@ -42,12 +42,13 @@ else
 endif
 
 " Load vimvs Python module
-python << EOF
+python3 << EOF
 # Add python sources folder to the system path.
 import vim
 sys.path.insert( 0, vim.eval('g:vimvs_plugin_root') + 'plugin' )
 import vimvs
-reload(vimvs)
+import importlib
+importlib.reload(vimvs)
 EOF
 
 "
@@ -93,7 +94,7 @@ endfunction
 
 function! vimvs#GetRoot()
 	let res = ""
-python << EOF
+python3 << EOF
 # Notes:
 #	repr so it convert any character to a way that I can pass them to the vim.command
 #	[1:-1] so it removes the single quotes at the start and end that repr puts in there
@@ -111,7 +112,7 @@ function! vimvs#LoadQuickfix()
 	if empty(vimvs#GetRoot())
 		return
 	endif
-python << EOF
+python3 << EOF
 try:
 	vimvs.LoadQuickfix()
 except RuntimeError as e:
@@ -196,7 +197,7 @@ function! vimvs#GetAlt(file)
 	if empty(vimvs#GetRoot())
 		return ""
 	endif
-python << EOF
+python3 << EOF
 try:
 	vim.command("let res = %s" % vimvs.ToVimString(vimvs.GetAlt(vim.eval('a:file'))))
 except RuntimeError as e:

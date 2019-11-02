@@ -20,7 +20,7 @@ def Launch(args):
 	if p.returncode>0:
 		raise RuntimeError("VIMVS: %s" % err.strip())
 		#raise RuntimeError("VIMVS: [%s] failed with: %s" % (' '.join(str(x) for x in args), err.strip()))
-	return out
+	return out.decode('utf-8')
 
 def GetRoot():
 	out = Launch(['-getroot'])
