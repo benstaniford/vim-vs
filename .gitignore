@@ -3,6 +3,9 @@ x64/
 build_release/
 release/
 release.zip
+plugin/__pycache__
+source/CMakeCache.txt
+source/CMakeFiles/
 
 # vim-vs temporary files
 /.vimvs-tmp*

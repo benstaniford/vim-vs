@@ -383,6 +383,15 @@ bool cmd_build(const Cmd& cmd, const std::string& val)
 	if (platform != "")
 		launchParams.push_back(formatString("/p:Platform=\"%s\"", platform.c_str()));
 
+    // Always include a SolutionDir which will always be the current directory, otherwise building vcxproj files
+    // which aren't in the same folder as the solution can fail
+    auto cwd = cz::getCWD();
+    if (cwd[cwd.size() - 1] = '\\')
+    {
+        cwd.erase(cwd.size() - 1);
+    }
+    launchParams.push_back(formatString("/p:SolutionDir=\"%s\"", cwd.c_str()));
+
 	Parser parser(*gDb, builddb, true, fastParser);
 	if (builddb)
 	{
