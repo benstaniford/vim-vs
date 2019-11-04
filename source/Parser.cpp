@@ -139,9 +139,12 @@ bool Parser::tryVimVsEnd(std::string& line)
 
 bool Parser::tryError(const std::string& line)
 {
+    CZ_LOG(logDefault, Log, "line=%s", line.c_str());
+
 	static std::regex rgx(
-		//                1         <2:File >|3:|  4:line    |       |    5        | |       6         |  |7 |
-		"[[:space:]]*([[:digit:]]*>)?(.*)(\\(([[:digit:]]+)\\)): (fatal error|error|warning) ([A-Z][[:digit:]]*): (.+)",
+		//           1      2  3  4                  5                           6           7
+        R"##(\s+\d*(\d*>)?(.*)(\((\d+)(?:,\d+|)\)): (fatal error|error|warning) ([A-Z]\d*): (.+))##",
+
 		std::regex::optimize);
 
 	static std::regex rgx2(
