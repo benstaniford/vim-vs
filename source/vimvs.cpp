@@ -366,7 +366,11 @@ bool cmd_build(const Cmd& cmd, const std::string& val)
 
 		launchParams.push_back(formatString("\"%s\"", src.prjFile.c_str()));
 		launchParams.push_back("/t:clCompile");
-		launchParams.push_back(formatString("/p:SelectedFiles=\"%s\"", src.fullpath.c_str()));
+		//launchParams.push_back(formatString("/p:SelectedFiles=\"%s\"", src.fullpath.c_str()));
+        //BENFIX Temporary hack to make relative project paths work, in reality this path
+        //may be full or relative but in order to build, it must be in the same format as the
+        //vcxproj specifies.
+		launchParams.push_back(formatString("/p:SelectedFiles=\"%s\"", src.name.c_str()));
 	}
 	else
 	{
@@ -440,6 +444,7 @@ bool cmd_build(const Cmd& cmd, const std::string& val)
 
 	for (auto&& e : parser.getErrors())
 	{
+        // TODO Should come out here..
 		quickfix << formatString("%s|%d|%d|%s|%s|%s\n",
 			e.file.c_str(), e.line, e.col, e.type.c_str(), e.code.c_str(), e.msg.c_str());
 	}
