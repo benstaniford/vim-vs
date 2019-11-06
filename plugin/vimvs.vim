@@ -10,7 +10,7 @@ if !has('python3')
     finish
 endif
 
-let g:vimvs_plugin_root = resolve(expand('<sfile>:p:h') . "\\..\\")
+let g:vimvs_plugin_root = resolve(expand('<sfile>:p:h') . "/../")
 
 if !exists('g:vimvs_exe')
     let g:vimvs_exe = resolve(fnamemodify(resolve(expand('<sfile>:p')), ':h') . "\\..\\bin\\vimvs.exe")
@@ -47,7 +47,7 @@ endif
 python3 << EOF
 # Add python sources folder to the system path.
 import vim
-sys.path.insert( 0, vim.eval('g:vimvs_plugin_root') + 'plugin' )
+sys.path.insert( 0, vim.eval('g:vimvs_plugin_root') + '/plugin' )
 import vimvs
 import importlib
 importlib.reload(vimvs)
