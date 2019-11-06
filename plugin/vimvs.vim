@@ -4,7 +4,9 @@
 "
 
 if !has('python3')
-    echoerr "vimvs requires Python support"
+    if !exists('g:vimvs_hide_python_warning')
+        echoerr "vimvs requires Python support"
+    endif
     finish
 endif
 
