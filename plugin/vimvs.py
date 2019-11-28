@@ -37,13 +37,26 @@ def GetDefaultSln():
     raise RuntimeError("No solution found")
 
 def WriteConfigFile(solution, flags, configuration, platform):
-    f = open(".vimvs.ini", "w+")
+    f = open(".vimvs.ini", "w+")  # TODO turn this into a constant
     f.write("[General]\n")
     f.write("solution=" + solution + "\n")
     f.write("common_ycm_params=" + flags + "\n")
     f.write("configuration=" + configuration + "\n")
     f.write("platform=" + platform + "\n")
     f.close()
+
+def ReadConfig():
+    f = open(".vimvs.ini", "r")
+    ret = []
+    lines = f.readlines()
+    f.close()
+    for line in lines:
+        keyval = line.split('=')
+        if (len(keyval) == 2):
+            [key, value] = keyval
+            if (key == 'platform' or key == 'configuration'):
+                ret.append(value.strip())
+    return ret
 
 def HasRoot():
     try:

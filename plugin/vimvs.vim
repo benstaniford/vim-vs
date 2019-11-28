@@ -233,7 +233,21 @@ try:
 except RuntimeError as e:
     vimvs.PrintError(e.message)
 EOF
+    " Make the config active
+    call vimvs#ReadConfig()
+endfunction
 
+" Reads the .vimvs.ini file and automatically sets the default configuration/platform
+"
+function! vimvs#ReadConfig()
+python3 << EOF
+try:
+    [configuration, platform] = vimvs.ReadConfig()
+    vim.command("let g:vimvs_configuration = %s" % vimvs.ToVimString(configuration))
+    vim.command("let g:vimvs_platform = %s" % vimvs.ToVimString(platform))
+except FileNotFoundError as e:
+    pass # We're silent if we can't read the config
+EOF
 endfunction
 
 "
@@ -257,5 +271,7 @@ command! VimvsClean call vimvs#Clean()
 command! VimvsCompile call vimvs#CompileFile(expand("%:p"))
 command! VimvsGetAlt call vimvs#GetAlt(expand("%:p"))
 command! VimvsOpenAlt call vimvs#OpenAlt(expand("%:p"))
+command! VimvsConfig call vimvs#CreateConfig()
 
-
+" As we move from folder to folder, see if there's a config in there
+autocmd DirChanged * call vimvs#ReadConfig()
