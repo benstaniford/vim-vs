@@ -208,6 +208,34 @@ EOF
     return res
 endfunction
 
+" Creates a default .vimvs file, scanning for a possible solution file as a default
+"
+function! vimvs#CreateConfig()
+    call inputsave()
+python3 << EOF
+try:
+    vim.command("let default = '%s'" % vimvs.GetDefaultSln())
+except RuntimeError as e:
+    vimvs.PrintError(e.message)
+EOF
+    let solution = input('Enter Solution: ', default, "file")
+    if (solution == "") | return | endif
+    let flags = input('Enter Flags: ', '-std=c++14|-Wall|-Wextra|-fexceptions|-Wno-microsoft|')
+    if (flags == "") | return | endif
+    let configuration = input('Enter Configuration: ', 'Debug')
+    if (configuration == "") | return | endif
+    let platform = input('Enter Platform: ', 'x64')
+    if (platform == "") | return | endif
+    call inputrestore()
+python3 << EOF
+try:
+    vimvs.WriteConfigFile(vim.eval('solution'), vim.eval('flags'), vim.eval('configuration'), vim.eval('platform'))
+except RuntimeError as e:
+    vimvs.PrintError(e.message)
+EOF
+
+endfunction
+
 "
 "
 function! vimvs#OpenAlt(file)
@@ -229,4 +257,5 @@ command! VimvsClean call vimvs#Clean()
 command! VimvsCompile call vimvs#CompileFile(expand("%:p"))
 command! VimvsGetAlt call vimvs#GetAlt(expand("%:p"))
 command! VimvsOpenAlt call vimvs#OpenAlt(expand("%:p"))
+
 

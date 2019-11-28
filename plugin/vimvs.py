@@ -29,6 +29,22 @@ def GetRoot():
         raise RuntimeError("VIMVS: error parsing -getroot output. Could not find ROOT line.")
     return strings.group(1).strip()
 
+def GetDefaultSln():
+    files = [f for f in os.listdir('.') if os.path.isfile(f)]
+    for f in files:
+        if f.endswith('sln'):
+            return f
+    raise RuntimeError("No solution found")
+
+def WriteConfigFile(solution, flags, configuration, platform):
+    f = open(".vimvs.ini", "w+")
+    f.write("[General]\n")
+    f.write("solution=" + solution + "\n")
+    f.write("common_ycm_params=" + flags + "\n")
+    f.write("configuration=" + configuration + "\n")
+    f.write("platform=" + platform + "\n")
+    f.close()
+
 def HasRoot():
     try:
         GetRoot()
