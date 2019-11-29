@@ -274,4 +274,6 @@ command! VimvsOpenAlt call vimvs#OpenAlt(expand("%:p"))
 command! VimvsConfig call vimvs#CreateConfig()
 
 " As we move from folder to folder, see if there's a config in there
-autocmd DirChanged * call vimvs#ReadConfig()
+if (v:version >= 801)
+    autocmd DirChanged * call vimvs#ReadConfig()
+endif
